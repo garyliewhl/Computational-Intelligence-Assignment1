@@ -3,9 +3,6 @@ import random
 import math
 
 class Particle:
-
-
-    
     def __init__(self, position, velocity = 0):
         self.position = position
         self.velocity = velocity
