@@ -54,17 +54,12 @@ def calc_fitness(position):
     # fitness -= (accommodation_cost + moving_cost)
 
     ## fitness function 2, all values are scaled to 0-1
-    # fitness = (renovation_level - ren_lvl_range[0]) / (ren_lvl_range[1] - ren_lvl_range[0])
-    # fitness += 1 - (((accommodation_cost - acc_cost_range[0]) + (moving_cost - mov_cost_range[0])) / ((acc_cost_range[1] - acc_cost_range[0]) + (mov_cost_range[1] - mov_cost_range[0])))
+    fitness = renovation_level
+    fitness += 1 - (((accommodation_cost - acc_cost_range[0]) + (moving_cost - mov_cost_range[0])) / ((acc_cost_range[1] - acc_cost_range[0]) + (mov_cost_range[1] - mov_cost_range[0])))
 
-    ## fitness function 3, renovation level scaled to range of 0-1 then multipled by the range of cost.
-    # fitness = (renovation_level - ren_lvl_range[0]) / (ren_lvl_range[1] - ren_lvl_range[0]) 
-    # fitness *= ((mov_cost_range[1] - mov_cost_range[0]) + (acc_cost_range[1] - acc_cost_range[0]))
+    ### fitness function 3, slight modification of fitness function 3.
+    # fitness = renovation_level * ((mov_cost_range[1] - mov_cost_range[0]) + (acc_cost_range[1] - acc_cost_range[0]))
     # fitness -= (accommodation_cost + moving_cost)
-
-    ### fitness function 4, slight modification of fitness function 3.
-    fitness = renovation_level * ((mov_cost_range[1] - mov_cost_range[0]) + (acc_cost_range[1] - acc_cost_range[0]))
-    fitness -= (accommodation_cost + moving_cost)
 
     return fitness
 
