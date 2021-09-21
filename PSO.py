@@ -1,6 +1,7 @@
 import numpy as np
 import random
 import math
+import matplotlib.pyplot as plt
 
 class Particle:
     def __init__(self, position, velocity = 0):
@@ -111,6 +112,13 @@ def main():
     min_avg_dis_diff = 0.01
 
     particles = initialize_particles(num_particles, position_limits)
+
+    space_ax = plt.axes()
+    space_ax.plot(list(range(*position_limits)),[calc_fitness(x) for x in range(*position_limits)])
+    space_ax.set_title("Position of particles in iteration {}".format(curr_iter))
+    space_ax.set_xlabel("Position")
+    space_ax.set_ylabel("Fitness")
+
     global_best = particles[0].position
     while((curr_iter < max_iter) and (calc_avg_fit_diff(particles) > min_avg_fit_diff) and (calc_avg_pos_diff(particles) > min_avg_dis_diff)):
         print("Iteration:", curr_iter)
@@ -140,5 +148,11 @@ def main():
     print("Global best:", global_best, calc_fitness(global_best))
     print("Cost:", (calc_acc_cost(global_best) + calc_mov_cost(global_best)), "Renovation:", calc_ren_lvl(global_best))
 
+    if len(space_ax.lines) > 1:
+        del space_ax.lines[1]
+    space_ax.plot([x.position for x in particles], [calc_fitness(x.position) for x in particles], 'go')
+    space_ax.set_title("Position of particles in iteration {}".format(curr_iter))
+    plt.pause(0.5) 
+    
 if __name__ == "__main__":
     main()
