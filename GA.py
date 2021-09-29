@@ -41,12 +41,13 @@ people = [
 num_people = 5
 pop_size = 10
 population = gen_pop(pop_size)
+happiness_list = []
+tournament = []
 
-
-
+#Generates the newer generation by selecting two parents and breeding them
 def reproduce_offspring(population):
-    # We will make a new list that stores the 'fitness' of each chromosome
-    # in the population, where 'fitness' depends on the total happiness.
+    
+    # We will make a new list that stores the fitness/happiness of each chromosome
     fitness_list = []
     
     for chromosome in population:
@@ -65,41 +66,40 @@ def reproduce_offspring(population):
     number_removed = len(population) - len(remainders)
 
     next_gen = remainders
-    # Parents are selected from the remaining populace
+    #Parents are selected from the remaining populace
     for i in range(number_removed):
         # Pick a parent from the remainders
         parent = random.choice(remainders)
-        # In order to avoid duplicate seats, parent 2 is created by modifying parent 1
+        #Making use of parents from the same sample caused an issue of duplicated seats eg: [A,B,C,D,A]
+        #Thus parent 2 is created by modifying parent 1 
         parent2 = parent[int(num_people / 2):num_people]
         random.shuffle(parent2)
+        #Crossover (Child is bred using half of parent 1 and half of parent 2)
         child = parent[0:int(num_people / 2)] + parent2
 
-        # The child is now part of the new generation
+        #New Generation
         next_gen.append(child)
 
     return next_gen
 
-
+#Mutation function
 def mutate(generation):
-    mutation_prob = 0.01
-    # Each member of the population has a chance of being mutated
+    mutation_prob = 0.0015
+    #Each member of the population has a chance of being mutated
     for i in range(len(generation)):
         if random.random() < mutation_prob:
-            # A mutation entails two elements of the arrangement swapping.
+            #Two seats are swapped at random
             a, b = random.sample(range(num_people), 2)
             population[i][b], population[i][a] = population[i][a], population[i][b]
 
-
-happiness_list = []
-tournament = []
-
-
+#Calls fitness function at every iteration
 def progress(generation):
-    population_fitness = [total_happiness(chromosome) for chromosome in population]
+    population_fitness = [total_happiness(chromosome) for chromosome in generation]
     happiness_list.append(max(population_fitness))
     max_location = population_fitness.index(max(population_fitness))
     tournament.append(population[max_location])
 
+#Replaces numbers with accurate labels
 def seat_labels(champion):
     j = 0
     for i in champion:
@@ -117,15 +117,18 @@ def seat_labels(champion):
         
     return champion
 
+
 if __name__ == '__main__':
     
-    number_of_generations = 500
+    number_of_generations = 1000
     while number_of_generations:
+
         next_gen = reproduce_offspring(population)
         progress(next_gen)
         mutate(next_gen)
         population = next_gen
         champion_location = happiness_list.index(max(happiness_list))
+
         if number_of_generations == 1:
             print("Tournament")
             for i in range (len(tournament)):
