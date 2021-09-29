@@ -117,12 +117,9 @@ def seat_labels(champion):
         
     return champion
 
-
-if __name__ == '__main__':
-    
+def main():
     number_of_generations = 1000
     while number_of_generations:
-
         next_gen = reproduce_offspring(population)
         progress(next_gen)
         mutate(next_gen)
@@ -147,3 +144,6 @@ if __name__ == '__main__':
     plt.xlabel('Generation Number')
     plt.ylabel("Total Happiness")
     plt.show()
+
+if __name__ == '__main__':
+    main()
