@@ -71,7 +71,7 @@ def calc_fitness(position):
     return fitness
 
 def check_global_best(local_best, global_best):
-    if calc_fitness(local_best) > calc_fitness(global_best):
+    if calc_fitness(local_best) < calc_fitness(global_best):
         return local_best
     else:
         return global_best
@@ -132,6 +132,12 @@ def main():
         print("Fitness:", [calc_fitness(particle.position) for particle in particles])
         print("Global best:", global_best, calc_fitness(global_best))
 
+        if len(space_ax.lines) > 1:
+            del space_ax.lines[1]
+        space_ax.plot([x.position for x in particles], [calc_fitness(x.position) for x in particles], 'go')
+        space_ax.set_title("Position of particles in iteration {}".format(curr_iter))
+        plt.pause(0.5) 
+
         if curr_iter % (max_iter//10) == 0:
                     inertia_weight -= 0.1
 
@@ -159,7 +165,6 @@ def main():
         del space_ax.lines[1]
     space_ax.plot([x.position for x in particles], [calc_fitness(x.position) for x in particles], 'go')
     space_ax.set_title("Position of particles in iteration {}".format(curr_iter))
-    plt.pause(0.5) 
     
     [pos_fig, position_axes] = plt.subplots(4,1,sharex=True)
     position_axes[0].set_title("Position of each particle")
@@ -181,6 +186,7 @@ def main():
     global_best_axes[0].set_title("Global best position")
     global_best_axes[1].set_title("Boxplot for global best position")
     global_best_axes[1].set_xlabel("Iteration")
+    
     for particle in particles:
         iteration_list = list(range(len(particle.position_list)))
         position_axes[0].plot(iteration_list, particle.position_list, '-o')
@@ -201,6 +207,7 @@ def main():
 
     global_best_axes[0].plot(iteration_list[:-1], global_best_position_list, '-o')
     global_best_axes[1].plot(iteration_list[:-1], [calc_fitness(x) for x in global_best_position_list], '-o')
-
+    plt.show()
+    
 if __name__ == "__main__":
     main()
