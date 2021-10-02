@@ -127,7 +127,7 @@ def main():
     curr_iter = 0
 
     # termination condition
-    max_iter = 1000
+    max_iter = 200
     min_avg_fit_diff = 0.01
     min_avg_dis_diff = 0.01
 
@@ -172,7 +172,7 @@ def main():
     print("Fitness:", [calc_fitness(particle.position) for particle in particles])
     print("Global best:", global_best, calc_fitness(global_best))
     print("Cost:", (calc_acc_cost(global_best) + calc_mov_cost(global_best)), "Renovation:", calc_ren_lvl(global_best))
-    return
+    
     if len(space_ax.lines) > 1:
         del space_ax.lines[1]
     space_ax.plot([x.position for x in particles], [calc_fitness(x.position) for x in particles], 'go')
