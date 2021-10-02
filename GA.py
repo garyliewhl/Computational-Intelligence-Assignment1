@@ -119,6 +119,8 @@ def seat_labels(champion):
 
 def main():
     number_of_generations = 1000
+    global population
+    
     while number_of_generations:
         next_gen = reproduce_offspring(population)
         progress(next_gen)
