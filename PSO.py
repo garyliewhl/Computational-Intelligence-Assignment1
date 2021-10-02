@@ -71,7 +71,7 @@ def calc_fitness(position):
     return fitness
 
 def check_global_best(local_best, global_best):
-    if calc_fitness(local_best) < calc_fitness(global_best):
+    if calc_fitness(local_best) > calc_fitness(global_best):
         return local_best
     else:
         return global_best
