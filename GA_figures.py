@@ -1,4 +1,4 @@
-import random, copy, numpy as np
+import random, copy, time, numpy as np
 import matplotlib.pyplot as plt
 
 #Initialise and Generate Population
@@ -71,6 +71,12 @@ pop_size = 25
 population = gen_pop(pop_size)
 happiness_list = []
 tournament = []
+
+def clear_variables():
+    global population
+    population = gen_pop(pop_size)
+    happiness_list.clear()
+    tournament.clear()
     
 
 #Generates the newer generation by selecting two parents and breeding them
@@ -147,7 +153,7 @@ def reproduce_offspring(population):
 
 #Mutation function
 def mutate(generation):
-    mutation_prob = 0.0015
+    mutation_prob = 0.002
     #Each member of the population has a chance of being mutated
     for i in range(len(generation)):
         if random.random() < mutation_prob:
@@ -185,8 +191,10 @@ def seat_labels(seats):
     return temp
 
 def main():
+    clear_variables()
     global population
     number_of_generations = 1000
+    gen_count = number_of_generations-1
     convergence_index = 0
     convergence_count = 0
 
@@ -198,7 +206,7 @@ def main():
         happiness_list = [total_happiness(i) for i in tournament]
 
         #Used a counter for the number of elements in the final tournament
-        if(number_of_generations<999):
+        if(number_of_generations<gen_count):
             #Used to compare each recurring element in the tournament with each other
             if(total_happiness(tournament[convergence_index]) < total_happiness(tournament[convergence_index+1])):
                 convergence_count = 0 #If the value wavers, the convergence counter resets
@@ -208,8 +216,8 @@ def main():
             convergence_index+=1
 
         # The termination conditions are the final iteration (1000 generations) or 
-        # if the convergence count (Number of recurring elements) passes 30%
-        if (number_of_generations == 1 or convergence_count > 300):
+        # if the convergence count (Number of recurring elements) passes roughly 30%
+        if (number_of_generations == 1 or convergence_count > (gen_count/3)):
             print("Tournament")
             #Prints and calculates the fitness/happiness of the best members of each generation
             for i in range (len(tournament)):
@@ -223,13 +231,36 @@ def main():
 
         number_of_generations -= 1
 
+
+if __name__ == '__main__':
     plt.figure(figsize=(20,10))
     plt.yticks(np.arange(-30, 250, 5))
-    plt.plot(happiness_list)
+    plt.xticks(np.arange(0, 1000, 50))
     plt.title("Happiness Scale")    
     plt.xlabel("Generation Number")
     plt.ylabel("Total Happiness")
+    for i in range(10):
+        main()
+        plt.plot(happiness_list, label="Iteration {}".format(i+1))
+        
+    plt.legend(loc="lower right")
+    plt.savefig("Multiple Run Comparison",bbox_inches="tight")
     plt.show()
 
-if __name__ == '__main__':
-    main()
+    plt.figure(figsize=(20,10))
+    plt.xlabel("Population")
+    plt.ylabel("Computiational Speed")
+    computation_speed = []
+    for i in range(1,1000):
+        pop_size = i
+        start = time.time()
+        main()
+        end = time.time()
+        time_elapsed = end-start
+        print("Time Taken: ", time_elapsed)
+        computation_speed.append(time_elapsed)
+
+    plt.plot(computation_speed)
+    plt.savefig("Computational Time with Population",bbox_inches="tight")
+    plt.show()
+
