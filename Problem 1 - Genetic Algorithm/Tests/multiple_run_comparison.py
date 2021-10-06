@@ -110,65 +110,69 @@ def seat_labels(seats):
     return label_list
     
 def main():
-    # Parameters
-    pop_size = 25    
-    happiness_list = []
-    tournament_winners = []    
-    max_iter = 1000
-    curr_iter = 1
-    convergence_count = 0
-    convergence_limit = 300
-    mutation_prob = 0.002
-
-    # Step 1: Initialization
-    population = gen_pop(pop_size)
-
-    # Termination condition 1: Max iteration 
-    while curr_iter <= max_iter:
-        # print("Population:", population)
-        # Termination condition 2: No improvement after specified iteration
-        if (convergence_count > convergence_limit):
-            break
-        
-        # Step 2: Check fitness and record best chromosome
-        tournament_winners.append(progress(population))
-        happiness_list.append(calc_happiness(tournament_winners[-1]))
-        # print("Tournament:", tournament_winners)
-        # print("Happiness:", happiness_list)
-        # Step 3: Make a new generation
-        population = generate_next_generation(population)
-
-        # Step 4: Mutate 
-        population = mutate(population, mutation_prob)
-
-        # Check for tournament winner improvements
-        if(curr_iter>1):
-            # If improvement occurs, reset convergence_count
-            if(happiness_list[-1] > happiness_list[-2]):
-                convergence_count = 0 
-            else:
-                convergence_count += 1 
-
-        curr_iter += 1
-
-    print("Tournament")
-    #Prints and calculates the fitness/happiness of the best members of each generation
-    for i in range (len(tournament_winners)):
-        print("Best of Generation ", i+1)
-        print(seat_labels(tournament_winners[i])," | Happiness: ", happiness_list[i])
-        
-    champion_location = happiness_list.index(max(happiness_list))
-    print("The Most Optimized Arrangement is : ", seat_labels(tournament_winners[champion_location]), ", with a happiness score of: ", happiness_list[champion_location])
 
     plt.figure(figsize=(5,5))
-    plt.yticks(np.arange(-30, 250, 5))
-    plt.plot(happiness_list)
+    random.seed(100) 
+
+    for iter in range(10):
+        # Parameters
+        pop_size = 25    
+        happiness_list = []
+        tournament_winners = []    
+        max_iter = 1000
+        curr_iter = 1
+        convergence_count = 0
+        convergence_limit = 300
+        mutation_prob = 0.002
+
+        # Step 1: Initialization
+        population = gen_pop(pop_size)
+
+        # Termination condition 1: Max iteration 
+        while curr_iter <= max_iter:
+            # print("Population:", population)
+            # Termination condition 2: No improvement after specified iteration
+            if (convergence_count > convergence_limit):
+                break
+            
+            # Step 2: Check fitness and record best chromosome
+            tournament_winners.append(progress(population))
+            happiness_list.append(calc_happiness(tournament_winners[-1]))
+            # print("Tournament:", tournament_winners)
+            # print("Happiness:", happiness_list)
+            # Step 3: Make a new generation
+            population = generate_next_generation(population)
+
+            # Step 4: Mutate 
+            population = mutate(population, mutation_prob)
+
+            # Check for tournament winner improvements
+            if(curr_iter>1):
+                # If improvement occurs, reset convergence_count
+                if(happiness_list[-1] > happiness_list[-2]):
+                    convergence_count = 0 
+                else:
+                    convergence_count += 1 
+
+            curr_iter += 1
+
+        print("Tournament")
+        #Prints and calculates the fitness/happiness of the best members of each generation
+        for i in range (len(tournament_winners)):
+            print("Best of Generation ", i+1)
+            print(seat_labels(tournament_winners[i])," | Happiness: ", happiness_list[i])
+            
+        champion_location = happiness_list.index(max(happiness_list))
+        print("The Most Optimized Arrangement is : ", seat_labels(tournament_winners[champion_location]), ", with a happiness score of: ", happiness_list[champion_location])
+
+        plt.plot(happiness_list, label="Iteration {}".format(iter+1))
+
+    plt.legend(loc="lower right")
     plt.title("Happiness Scale")    
     plt.xlabel("Generation Number")
     plt.ylabel("Total Happiness")
-    plt.savefig("Happiness Scale")
+    plt.savefig("Multiple Run Comparison",bbox_inches="tight")
     plt.show()
-    print()
         
 if __name__ == '__main__':
     main()
