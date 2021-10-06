@@ -72,8 +72,8 @@ def calc_avg_fit_diff(particles):
 
 def calc_avg_pos_diff(particles):
     position_list = [particle.position for particle in particles]
-    mean_poition = sum(position_list) / len(position_list)
-    difference = [abs(pos - mean_poition) for pos in position_list]
+    mean_position = sum(position_list) / len(position_list)
+    difference = [abs(pos - mean_position) for pos in position_list]
     avg_pos_diff = sum(difference)/len(difference)
     return avg_pos_diff
 

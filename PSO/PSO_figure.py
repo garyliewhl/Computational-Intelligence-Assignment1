@@ -26,7 +26,7 @@ class Particle:
         if calc_fitness(self.position) > calc_fitness(self.local_best):
             self.local_best = self.position
 
-# Function to calculate accomodation cost
+# Function to calculate accommodation cost
 def calc_acc_cost(position):
     days = position // 1440 # day value without decimals
     return round((30 + (days * 30) + ((7 - days) * 25)), 2)
@@ -53,7 +53,7 @@ def calc_fitness(position):
     renovation_level = calc_ren_lvl(position)
     moving_cost = calc_mov_cost(position)
 
-    ## fitness function - scales accomodation and moving cost to a range of 0-1
+    ## fitness function - scales accommodation and moving cost to a range of 0-1
     fitness = renovation_level
     fitness += 1 - (((accommodation_cost - acc_cost_range[0]) + (moving_cost - mov_cost_range[0])) / ((acc_cost_range[1] - acc_cost_range[0]) + (mov_cost_range[1] - mov_cost_range[0])))
 
@@ -82,10 +82,10 @@ def calc_avg_fit_diff(particles):
 def calc_avg_pos_diff(particles):
     # Getting the mean position
     position_list = [particle.position for particle in particles]
-    mean_poition = sum(position_list) / len(position_list)
+    mean_position = sum(position_list) / len(position_list)
 
     # Getting the average difference
-    difference = [abs(pos - mean_poition) for pos in position_list]
+    difference = [abs(pos - mean_position) for pos in position_list]
     avg_pos_diff = sum(difference)/len(difference)
 
     return avg_pos_diff
