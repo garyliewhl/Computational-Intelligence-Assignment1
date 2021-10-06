@@ -28,34 +28,6 @@ def total_happiness(seats):
 
     return(happiness)
 
-""" Scuffed up code lmao
-def validate_combination(seat, elem):
-    inx = seat.index(elem)
-    for i in range(1,num_people+1):
-        if(seat.count(i) == 0):
-            seat[inx] = i
-            
-        
-def valid_combination(seat):
-    for elem in seat:
-        if seat.count(elem) > 1:
-            validate_combination(seat, elem)
-    return True 
-
-def crossover(arr1,arr2):
-    #Crossover/Breeding of the two parents
-    cpoint1 = random.randint(1, num_people) #Crossover Point 1
-    cpoint2 = random.randint(1, num_people - 1) #Crossover Point 2
-    if cpoint2 >= cpoint1:
-        cpoint2 += 1
-    else:  # Swap the two cx points
-        cpoint1, cpoint2 = cpoint2, cpoint1
-
-    arr1[cpoint1:cpoint2], arr2[cpoint1:cpoint2] = arr2[cpoint1:cpoint2], arr1[cpoint1:cpoint2]
-
-    return arr1,arr2
- """
- 
 #CONSTANTS
 
 people = [
@@ -115,35 +87,7 @@ def reproduce_offspring(population):
         next_gen.append(child)
 
     return next_gen
-    
-""" Part of the scuffed code    
-    #Parents are selected from the remaining populace
-    for i in range(number_removed):
-        c_flag = False #initialising flag 
-        counter = 0 #Child flag
-        
-        while(c_flag is False):
-            # Pick a parent from the remainders
-            parent1 = random.choice(next_gen)
-            parent2 = random.choice(next_gen)
-            
-            child1,child2 = crossover(parent1,parent2)
-            
-            mutate(child1)
-            mutate(child2)
-            
-            if(valid_combination(child1)):
-                next_gen.append(child1)
-                counter += 1
-            if(valid_combination(child2)):
-                next_gen.append(child2)
-                counter+=1
-
-            if (counter>0):
-                c_flag = True
-                 """
-
-        
+     
 
 #Mutation function
 def mutate(generation):
