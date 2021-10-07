@@ -56,7 +56,6 @@ def generate_next_generation(population):
     
     # Calculate average fitness
     fitness_list = [calc_happiness(chromosome) for chromosome in population]
-    # print(fitness_list)
     average_fitness = sum(fitness_list)/len(fitness_list)
 
     # Remove any chromosome below average fitness
@@ -66,7 +65,6 @@ def generate_next_generation(population):
     # Parent is randomly selected from the remaining population and crossedover to replenish lost population
     number_removed = len(population) - len(remaining_pop)
     for i in range(number_removed):
-        # print("remaining:", remaining_pop)
         # Pick a parent from the remainders
         child = asexual_crossover(random.choice(remaining_pop)) 
         next_gen.append(child)
@@ -86,7 +84,7 @@ def mutate(population, mutation_prob):
     return population
 
 # Selects the best chromosome from this generation
-def progress(population):
+def elitism_selection(population):
     population_fitness = [calc_happiness(chromosome) for chromosome in population]
     best_index = population_fitness.index(max(population_fitness))
     return population[best_index]
@@ -110,10 +108,11 @@ def seat_labels(seats):
     return label_list
     
 def main():
+    random.seed(5)
     # Parameters
     pop_size = 25    
     happiness_list = []
-    tournament_winners = []    
+    elitism_winners = []    
     max_iter = 1000
     curr_iter = 1
     convergence_count = 0
@@ -125,16 +124,17 @@ def main():
 
     # Termination condition 1: Max iteration 
     while curr_iter <= max_iter:
-        # print("Population:", population)
         # Termination condition 2: No improvement after specified iteration
         if (convergence_count > convergence_limit):
             break
         
         # Step 2: Check fitness and record best chromosome
-        tournament_winners.append(progress(population))
-        happiness_list.append(calc_happiness(tournament_winners[-1]))
-        # print("Tournament:", tournament_winners)
-        # print("Happiness:", happiness_list)
+        elitism_winners.append(elitism_selection(population))
+        happiness_list.append(calc_happiness(elitism_winners[-1]))
+
+        print("Best of Generation:", curr_iter)
+        print(seat_labels(elitism_winners[-1])," | Happiness: ", happiness_list[-1], "\n")
+
         # Step 3: Make a new generation
         population = generate_next_generation(population)
 
@@ -151,18 +151,13 @@ def main():
 
         curr_iter += 1
 
-    print("Tournament")
-    #Prints and calculates the fitness/happiness of the best members of each generation
-    for i in range (len(tournament_winners)):
-        print("Best of Generation ", i+1)
-        print(seat_labels(tournament_winners[i])," | Happiness: ", happiness_list[i])
-        
     champion_location = happiness_list.index(max(happiness_list))
-    print("The Most Optimized Arrangement is : ", seat_labels(tournament_winners[champion_location]), ", with a happiness score of: ", happiness_list[champion_location])
+    print("Final Result:")
+    print("The Most Optimized Arrangement is : ", seat_labels(elitism_winners[champion_location]), ", with a happiness score of: ", happiness_list[champion_location])
 
     plt.figure(figsize=(5,5))
     plt.yticks(np.arange(-30, 250, 5))
-    plt.plot(happiness_list)
+    plt.plot(happiness_list, "--o")
     plt.title("Happiness Scale")    
     plt.xlabel("Generation Number")
     plt.ylabel("Total Happiness")
