@@ -161,7 +161,7 @@ def main():
     plt.title("Happiness Scale")    
     plt.xlabel("Generation Number")
     plt.ylabel("Total Happiness")
-    plt.savefig("Happiness Scale")
+    plt.savefig("Happiness Scale", bbox_inches="tight")
     plt.show()
     print()
         
